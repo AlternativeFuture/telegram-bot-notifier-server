@@ -30,16 +30,18 @@ test_report:
 run:
 	flask run --host=0.0.0.0
 
-run_db_for_tests:
-	docker run --rm --name prediction_db --net host -e POSTGRES_PASSWORD=aswa -e POSTGRES_USER=aswa -d postgres:15.6 && \
-	echo "waiting for postgresql to start..." && \
-	timeout 120 sh -c 'until nc -w 1 -z 127.0.0.1 5432; do sleep 1; done' 2> /dev/null && \
-	docker exec prediction_db psql -h localhost -U aswa -c "CREATE DATABASE aswa_accident" && \
-	docker exec -i prediction_db psql -h localhost -U aswa -d aswa_accident < db/dump/aswa_accident.sql && \
-	docker exec prediction_db psql -h localhost -U aswa -c "CREATE DATABASE aswa_fault_determination" && \
-	docker exec -i prediction_db psql -h localhost -U aswa -d aswa_fault_determination < db/dump/aswa_fault_determination.sql && \
-	docker exec -i prediction_db psql -h localhost -U aswa -d aswa_accident < db/dump/aswa_accident_accident.sql && \
-	docker exec -i prediction_db psql -h localhost -U aswa -d aswa_fault_determination < db/dump/aswa_fault.sql && \
-	docker exec prediction_db psql -h localhost -U aswa -c "CREATE DATABASE training" && \
-	docker exec -i prediction_db psql -h localhost -U aswa -d training < db/dump/training_metrics.sql
 
+create_db:
+	PGPASSWORD=postgres psql -h localhost -U postgres -w -c "CREATE DATABASE database;"
+
+drop_db:
+	PGPASSWORD=postgres psql -h localhost -U postgres -w -c "DROP DATABASE database;"
+
+create_table:
+	alembic revision -m "Create table"
+
+migrate:
+	alembic upgrade head
+
+data_for_test:
+	pass
