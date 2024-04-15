@@ -1,4 +1,4 @@
-from .models import Table
+from .models import Identifier
 
 from flask import Blueprint, jsonify, request
 
@@ -10,23 +10,17 @@ def check_id():
     pk = request.args.get('id')
     if not pk:
         # TODO: fix with correct status
-        errors = {'all': 'ID must be provided!'}
-        return jsonify(errors), 204
+        return jsonify({'all': 'ID must be provided!'}), 400
 
     # TODO: implement exception handling
     # try:
-    #     row = Table.get_by_id(pk=pk)
+    #     row = Identifier.get_by_id(pk=pk)
     # except:
-    row = Table.get_by_id(pk=pk)
+    row = Identifier.get_by_id(pk=pk)
 
     if not row:
         'notify telegram bot admin'
         errors = {'all': "Requested ID doesn't exist in database!"}
-        return jsonify(errors), 204
+        return jsonify(errors), 400
 
-    errors = {'all': 'Requested ID exists in database!'}
-    return jsonify(errors), 200
-
-
-# if __name__ == '__main__':
-#     app.run()
+    return jsonify({'all': 'Requested ID exists in database!'}), 200

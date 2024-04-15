@@ -31,17 +31,18 @@ run:
 	flask run --host=0.0.0.0
 
 
+
 create_db:
 	PGPASSWORD=postgres psql -h localhost -U postgres -w -c "CREATE DATABASE database;"
 
 drop_db:
 	PGPASSWORD=postgres psql -h localhost -U postgres -w -c "DROP DATABASE database;"
 
-create_table:
-	alembic revision -m "Create table"
+#create_table:
+#	alembic revision -m "Create table"
 
 migrate:
 	alembic upgrade head
 
 data_for_test:
-	pass
+	PGPASSWORD=postgres psql -h localhost -U postgres -w -d database -c "INSERT INTO identifier (product_id) VALUES (1234), (1200), (333), (4321);"
