@@ -1,4 +1,4 @@
-.PHONY: clean lint install devinstall
+.PHONY: clean lint install devinstall docker
 
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 PROFILE = default
@@ -28,7 +28,7 @@ test_report:
 	pytest --cov src/
 
 run:
-	flask run --host=0.0.0.0
+	flask run --host=localhost --port=8000 --debug
 
 
 
@@ -45,4 +45,21 @@ migrate:
 	alembic upgrade head
 
 data_for_test:
-	PGPASSWORD=postgres psql -h localhost -U postgres -w -d database -c "INSERT INTO identifier (product_id) VALUES (1234), (1200), (333), (4321);"
+	PGPASSWORD=postgres psql -h localhost -U postgres -w -d database -c "INSERT INTO identifier (telegram_id) VALUES (1234), (1200), (333), (4321);"
+
+#docker:
+#	docker compose up --build
+#down:
+#	docker compose down
+#prune:
+#	docker system prune -a -f
+#
+#fclean: down prune
+#
+#re: fclean docker
+
+postgres:
+	sudo systemctl start postgresql.service
+
+stop_postgres:
+	sudo systemctl stop postgresql.service

@@ -4,11 +4,11 @@ from .db import db
 class Identifier(db.Model):
     __tablename__ = 'identifier'
     id = db.Column(db.Integer(), primary_key=True)
-    product_id = db.Column(db.Integer())
+    telegram_id = db.Column(db.BigInteger())
 
     @staticmethod
-    def get_by_id(pk):
-        return Identifier.query.filter_by(product_id=pk).first()
+    def get_by_id(telegram_id):
+        return Identifier.query.filter_by(telegram_id=telegram_id).first()
 
     def __repr__(self):
-        return f'<Id {self.product_id}>'
+        return f'<Id {self.telegram_id}>'

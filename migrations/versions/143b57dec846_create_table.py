@@ -22,7 +22,7 @@ def upgrade() -> None:
     op.create_table(
         'identifier',
         sa.Column('id', sa.Integer, primary_key=True),
-        sa.Column('product_id', sa.Integer),
+        sa.Column('telegram_id', sa.BigInteger),
     )
 
 
