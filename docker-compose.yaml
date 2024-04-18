@@ -7,28 +7,20 @@ services:
       context: .
 
     ports:
-      - "5000:5000"
+      - "8000:8000"
     depends_on:
-      - db
-#      - telegram-bot
+      - postgres
     restart: on-failure
 
-  db:
-    container_name: db
-    image: postgres:latest
+  postgres:
+    container_name: postgres
+    image: postgres:16
     ports:
       - "5432:5432"
-    env_file:
-      - .dbenv
-#    environment:
-#      POSTGRES_DB: mydatabase
-#      POSTGRES_USER: myuser
-#      POSTGRES_PASSWORD: mypassword
-
-#  telegram-bot:
-#    image: "python:3.9-slim"
-#    volumes:
-#      - ./app:/app
-#    command: python telegram_bot.py
-#    environment:
-#      TELEGRAM_BOT_TOKEN: "your_bot_token"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    command: >
+      sh -c "
+      PGPASSWORD=postgres psql -h localhost -U postgres -w -c 'CREATE DATABASE database;'
+      && alembic upgrade head
+      && PGPASSWORD=postgres psql -h localhost -U postgres -w -d database -c 'INSERT INTO identifier (telegram_id) VALUES (1234), (1200), (333), (4321);'"

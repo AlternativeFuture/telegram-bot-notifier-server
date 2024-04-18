@@ -47,16 +47,16 @@ migrate:
 data_for_test:
 	PGPASSWORD=postgres psql -h localhost -U postgres -w -d database -c "INSERT INTO identifier (telegram_id) VALUES (1234), (1200), (333), (4321);"
 
-#docker:
-#	docker compose up --build
-#down:
-#	docker compose down
-#prune:
-#	docker system prune -a -f
-#
-#fclean: down prune
-#
-#re: fclean docker
+docker:
+	docker compose up --build
+down:
+	docker compose down
+prune:
+	docker system prune -a -f
+
+fclean: down prune
+
+re: fclean docker
 
 postgres:
 	sudo systemctl start postgresql.service
