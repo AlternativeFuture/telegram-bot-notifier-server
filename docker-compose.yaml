@@ -10,17 +10,20 @@ services:
       - "8000:8000"
     depends_on:
       - postgres
-    restart: on-failure
+#    restart: on-failure
+    command: sh -c "./wait-for-it.sh postgres:5432 -- python3 ./main.py"
 
   postgres:
-    container_name: postgres
     image: postgres:16
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=postgres
-    command: >
-      sh -c "
-      PGPASSWORD=postgres psql -h localhost -U postgres -w -c 'CREATE DATABASE database;'
-      && alembic upgrade head
-      && PGPASSWORD=postgres psql -h localhost -U postgres -w -d database -c 'INSERT INTO identifier (telegram_id) VALUES (1234), (1200), (333), (4321);'"
+
+  extended_postgres:
+    image: postgres:16
+    depends_on:
+      - postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    command: sh -c "sleep 10 && PGPASSWORD=postgres psql -h postgres -U postgres -c 'CREATE DATABASE database;' && sleep 5 && PGPASSWORD=postgres psql -h postgres -U postgres -d database -c 'CREATE TABLE identifier (id SERIAL PRIMARY KEY, telegram_id INT); INSERT INTO identifier (telegram_id) VALUES (1234), (1200), (333), (4321);'"

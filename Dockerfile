@@ -11,5 +11,3 @@ RUN apt update -y && apt install vim -y
 COPY . .
 
 ENV DEBUG=False
-
-CMD ["python", "main.py"]
