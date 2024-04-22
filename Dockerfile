@@ -2,12 +2,13 @@
 
 FROM python:3.8-slim-buster
 
-WORKDIR /python-docker
-
-COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
 RUN apt update -y && apt install vim -y
 
-COPY . .
+RUN mkdir /app
+ADD . /app/
+WORKDIR /app/
+
+
+RUN pip3 install -r requirements.txt
 
 ENV DEBUG=False

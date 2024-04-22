@@ -3,13 +3,13 @@ import requests
 
 class Telebot:
     def __init__(self, bot_token):
-        self.bot_token = bot_token
+        self._bot_token = bot_token
+        self._url = 'https://api.telegram.org/bot{}'.format(self._bot_token)
 
     def send_notification(self, chat_id, message):
-        url = 'https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}'.format(self.bot_token, chat_id, message)
-        requests.get(url)
+        url = '{}/sendMessage?chat_id={}&text={}'.format(self._url, chat_id, message)
+        return requests.get(url)
 
     def get_updates(self):
-        url = 'https://api.telegram.org/bot{}/getUpdates'.format(self.bot_token)
-
-        requests.get(url)
+        url = '{}/getUpdates'.format(self._url)
+        return requests.get(url)
