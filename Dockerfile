@@ -1,14 +1,12 @@
 # syntax=docker/dockerfile:1
 
-FROM python:3.8-slim-buster
-
-RUN apt update -y && apt install vim -y
+FROM python:3.9
 
 RUN mkdir /app
 ADD . /app/
 WORKDIR /app/
 
 
-RUN pip3 install -r requirements.txt
+RUN pip install -r requirements.txt
 
 ENV DEBUG=False

@@ -1,16 +1,26 @@
-version: '3.3'
+version: '3.9'
 
 services:
-  app:
-    container_name: app
+  project_img:
     build:
       context: .
-    ports:
-      - "8000:8000"
+      dockerfile: Dockerfile
+    image: telegram_bot_notifire:latest
+
+  project_app:
+    image: telegram_bot_notifire:latest
+    env_file:
+      - .env
+    restart: on-failure
+
+  project:
+    extends:
+      service: project_app
     depends_on:
       - postgres
-    restart: on-failure
-    command: sh -c "./wait-for-it.sh postgres:5432 -- python3 ./main.py"
+    command: ./wait-for-it.sh postgres:5432 -- python3 ./main.py
+    ports:
+      - "8000:8000"
 
   postgres:
     image: postgres:16
