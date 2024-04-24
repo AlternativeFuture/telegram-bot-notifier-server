@@ -18,8 +18,8 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.execute("INSERT INTO identifier (telegram_id) VALUES (1234), (1200), (333), (4321);")
+    op.execute('INSERT INTO identifier (telegram_id) VALUES (1234), (1200), (333), (4321);')
 
 
 def downgrade() -> None:
-    op.execute("TRUNCATE identifier")
+    op.execute('TRUNCATE identifier')

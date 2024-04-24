@@ -1,7 +1,7 @@
 """Create table
 
 Revision ID: 143b57dec846
-Revises: 
+Revises:
 Create Date: 2024-04-14 19:34:03.916403
 
 """
